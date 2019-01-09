@@ -4,14 +4,16 @@ const path = require('path');
 
 const wstream = fs.createWriteStream(__dirname + '/data.txt');
 let i = 0;
+let current = 0;
 
 const WriteOne = () => {
 	while (i < 10000000){
 		let res = [];
 		for (let j = 0; j < Math.floor(Math.random()*5); j++) {
+			current ++;
 			let date = faker.date.past();
 			res.push({
-				id: j,
+				id: current,
 				dateToReserve: date.getDay().toString() + date.getMonth().toString() + date.getFullYear().toString(),
 				timeToReserve: date.getHours().toString() + date.getMinutes().toString(), 
 				partySize: Math.floor(Math.random()*5).toString(),
