@@ -14,6 +14,18 @@ const addRestaurant = (restaurantName) => {
 	})
 }
 
+const getReservations = (restaurantID) => {
+	return new Promise((resolve, reject) => {
+		client.query(`SELECT * FROM reservations WHERE restaurantID=${restaurantID}`, (err, res) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(res);
+			}
+		})
+	})
+}
+
 const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) => {
 	return new Promise((resolve, reject) => {
 		client.query(`INSERT INTO reservations(restaurantID, dateToReserve, timeToReserve, partySize) VALUES(${restaurantID},${dateToReserve}, ${timeToReserve}, ${partySize})`, (err, res) => {
@@ -57,5 +69,6 @@ module.exports = {
 	updateReservation,
 	deleteReservation,
 	addReservation,
-	addRestaurant
+	addRestaurant,
+	getReservations,
 }
