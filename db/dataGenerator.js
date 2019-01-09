@@ -7,16 +7,16 @@ let i = 0;
 
 const WriteOne = () => {
 	while (i < 10000000){
-		var res = [];
-		for (var j = 0; j < Math.floor(Math.random()*5); j++) {
-			var date = faker.date.past();
+		let res = [];
+		for (let j = 0; j < Math.floor(Math.random()*5); j++) {
+			let date = faker.date.past();
 			res.push({
 				id: j,
 				dateToReserve: date.getDay().toString() + date.getMonth().toString() + date.getFullYear().toString(),
 				timeToReserve: date.getHours().toString() + date.getMinutes().toString(), 
 				partySize: Math.floor(Math.random()*5).toString(),
 			})
-			var entry = {
+			let entry = {
 				id: i,
 				name: faker.company.companyName(),
 				reservations: res,
