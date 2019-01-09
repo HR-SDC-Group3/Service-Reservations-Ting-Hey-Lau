@@ -24,10 +24,16 @@ app.post(`/api/reservations/`, (req, res) => {
 });
 
 app.delete(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
-
+	//db.getReservations(req.body.restaurantID)
+		//.then(db.deleteReservation(req.body.date))
+			//.then(res.end())
 });
 
-app.put(`/api/reservations/restaurantID=:restaurantID&date=:date`)
+app.put(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
+	//db.getReservations(req.body.restaurantID)
+		//.then(db.updateReservation(date, newDate))
+			//.then(res.end())
+});
 
 const port = 3002;
 app.listen(port, () => {
