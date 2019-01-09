@@ -34,7 +34,6 @@ app.put(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) =>
 	db.updateReservations(req.body.reservationID, req.body.date, req.body.time, req.body.partySize).then(() => {
     res.end();
   })
-
 });
 
 const port = 3002;

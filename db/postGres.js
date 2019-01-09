@@ -1,6 +1,21 @@
-const { Client } = require('pg');
+const { Pool,Client } = require('pg');
 const Promise = require('bluebird');
-const client = new Client();
+
+const client = new Client({
+	user: 'postgres',
+	host: 'localhost',
+	database: 'openTableReservations',
+	password: 'admin',
+	port: 5432,
+})
+
+client.connect((err) => {
+	if (err) {
+		console.error(err.stack);
+	} else {
+		console.log('connected');
+	}
+})
 
 const addRestaurant = (restaurantName) => {
 	return new Promise((resolve, reject) => {
@@ -61,9 +76,7 @@ const updateReservation = (reservationID, dateToReserve, timeToReserve, partySiz
 		})
 	})
 }
-await client.connect()
 
-cons res = await client.query()
 
 module.exports = {
 	updateReservation,
@@ -71,4 +84,5 @@ module.exports = {
 	addReservation,
 	addRestaurant,
 	getReservations,
+	client
 }
