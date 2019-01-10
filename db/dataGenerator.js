@@ -2,7 +2,7 @@ const fs = require('fs');
 const faker = require('faker');
 const path = require('path');
 
-const wstream = fs.createWriteStream(__dirname + '/data.txt');
+const wstream = fs.createWriteStream(__dirname + '/data.csv', {flags: 'w'});
 let i = 0;
 let current = 0;
 
@@ -23,7 +23,7 @@ const WriteOne = () => {
 				name: faker.company.companyName(),
 				reservations: res,
 			};
-			if(!wstream.write(JSON.stringify(entry))) {
+			if(!wstream.write(JSON.stringify(entry) + '\n')) {
 				return;
 			}
 			i++;

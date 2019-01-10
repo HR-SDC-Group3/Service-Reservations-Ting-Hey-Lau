@@ -5,6 +5,7 @@ example
 build
 db/config.js
 db/data.txt
+db/data.csv
 
 # Only apps should have lockfiles
 yarn.lock

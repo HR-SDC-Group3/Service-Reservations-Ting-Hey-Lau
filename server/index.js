@@ -14,7 +14,7 @@ app.use(cors());
 app.get(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
   db.getReservations(req.params.restaurantID, req.params.date).then((results) => {
     console.log('results', JSON.parse(results));
-    res.end(results);
+    res.end(JSON.stringify(results));
   });
 });
 
@@ -25,7 +25,7 @@ app.post(`/api/reservations/`, (req, res) => {
 });
 
 app.delete(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
-	db.deleteReservation(req.body.partySize, req.body.date, req.body.time).then(() => {
+	db.deleteReservation(req.body.reservationID).then(() => {
     res.end();
   })
 });
