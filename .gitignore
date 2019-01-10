@@ -4,8 +4,8 @@ node_modules
 example
 build
 db/config.js
-db/data.txt
-db/data.csv
+db/reservations.csv
+db/restaurants.csv
 
 # Only apps should have lockfiles
 yarn.lock
