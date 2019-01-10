@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const promise = require('bluebird');
 const db = require('../db');
 const cors = require('cors')
 
@@ -11,28 +12,28 @@ app.use(bodyParser());
 app.use(cors());
 
 app.get(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
-  db.getReservations(req.params.restaurantID, req.params.date, (results) => {
+  db.getReservations(req.params.restaurantID, req.params.date).then((results) => {
     console.log('results', JSON.parse(results));
-    res.end(results);
+    res.end(JSON.stringify(results));
   });
 });
 
 app.post(`/api/reservations/`, (req, res) => {
-  db.addReservation(req.body.restaurantID, req.body.date, req.body.time, req.body.partySize, () => {
+  db.addReservation(req.body.restaurantID, req.body.date, req.body.time, req.body.partySize).then(() => {
     res.end();
   });
 });
 
 app.delete(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
-	//db.getReservations(req.body.restaurantID)
-		//.then(db.deleteReservation(req.body.date))
-			//.then(res.end())
+	db.deleteReservation(req.body.reservationID).then(() => {
+    res.end();
+  })
 });
-
+//no such function on client side that deletes entries
 app.put(`/api/reservations/restaurantID=:restaurantID&date=:date`, (req, res) => {
-	//db.getReservations(req.body.restaurantID)
-		//.then(db.updateReservation(date, newDate))
-			//.then(res.end())
+	db.updateReservations(req.body.reservationID, req.body.date, req.body.time, req.body.partySize).then(() => {
+    res.end();
+  })
 });
 
 const port = 3002;
