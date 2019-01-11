@@ -24,3 +24,4 @@ COPY reservations(restaurantID, dateToReserve, timeToReserve, partySize) FROM 'C
 /* run psql -U YOUR_USER_NAME -W < db/postGresSchema.sql
 from the root directory and enter your password for the prompts 
 change lines 20, 22 to absolute paths for respective restaurant and reservation csv raw data files*/
+

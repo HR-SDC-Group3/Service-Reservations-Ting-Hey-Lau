@@ -1,6 +1,7 @@
 const { Pool,Client } = require('pg');
 const Promise = require('bluebird');
 
+
 const client = new Pool({
 	user: 'postgres',
 	host: 'localhost',
@@ -17,9 +18,11 @@ client.connect((err) => {
 	}
 })
 
+
 const addRestaurant = (restaurantID, restaurantName) => {
 	return new Promise((resolve, reject) => {
 		client.query(`INSERT INTO restaurants (id, restaurantname) VALUES ('${restaurantID}', '${restaurantName}'); `, (err, res) => {
+
 			if (err) {
 				reject(err);
 			} else {
@@ -40,6 +43,7 @@ const getReservations = (restaurantID, dateToReserve) => {
 		})
 	})
 };
+
 
 const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) => {
 	return new Promise((resolve, reject) => {
