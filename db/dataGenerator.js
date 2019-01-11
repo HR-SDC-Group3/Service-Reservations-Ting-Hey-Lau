@@ -47,5 +47,3 @@ wRestStream.on('drain', () => {
 wResStream.on('drain', () => {
 	WriteOne();
 })
-
-WriteOne();
