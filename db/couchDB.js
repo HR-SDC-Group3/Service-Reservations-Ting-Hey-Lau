@@ -4,26 +4,21 @@ const couch = require('./couchDBSeed.js');
 
 const addRestaurant = (restaurantID, restaurantName) => {
 	return new Promise((resolve, reject) => {
-		couch.query(`INSERT INTO restaurants (id, restaurantname) VALUES ('${restaurantID}', '${restaurantName}'); `, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res);
-			}
+		couch.insert('opentablereservations', {
+			_id:restaurantID,
+			
 		})
 	})
 };
 
 const getReservations = (restaurantID, dateToReserve) => {
-	return new Promise((resolve, reject) => {
-		couch.query(`SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve='${dateToReserve}';`, (err, res) => {
+		couch.get("opentablereservations", `SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve='${dateToReserve}';`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
 				resolve(res.rows);
 			}
 		})
-	})
 };
 
 const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) => {
