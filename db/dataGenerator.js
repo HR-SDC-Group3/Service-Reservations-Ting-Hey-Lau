@@ -22,7 +22,9 @@ let i = 0;
 const WriteOne = () => {
 	while (i < 10000000){
 		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
-			wResStream.write(`${i},${generateDate()},${generateTime()},${generatePartySize()}\n`);
+			if (!WriteRes(i)) {
+				return;
+			}
 		}
 		if (!wRestStream.write(`${i},${generateName()}\n`)) {
 			i++;
@@ -34,8 +36,16 @@ const WriteOne = () => {
 	wRestStream.end();
 };
 
+const WriteRes = (i) => {
+	return wResStream.write(`${i},${generateDate()},${generateTime()},${generatePartySize()}\n`)
+}
+
 wRestStream.on('drain', () => {
 	WriteOne();
 });
+
+wResStream.on('drain', () => {
+	WriteOne();
+})
 
 WriteOne();

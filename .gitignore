@@ -6,6 +6,7 @@ build
 db/config.js
 db/reservations.csv
 db/restaurants.csv
+db/couchConfig.js
 
 # Only apps should have lockfiles
 yarn.lock
