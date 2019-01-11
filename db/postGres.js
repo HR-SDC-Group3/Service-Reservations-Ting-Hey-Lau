@@ -1,7 +1,8 @@
 const { Pool,Client } = require('pg');
 const Promise = require('bluebird');
 
-const client = new Client({
+
+const client = new Pool({
 	user: 'postgres',
 	host: 'localhost',
 	database: 'opentablereservations',
@@ -17,9 +18,11 @@ client.connect((err) => {
 	}
 })
 
-const addRestaurant = (restaurantName) => {
+
+const addRestaurant = (restaurantID, restaurantName) => {
 	return new Promise((resolve, reject) => {
-		client.query(`INSERT INTO restaurants (restaurantname) VALUES ('${restaurantName}'); `, (err, res) => {
+		client.query(`INSERT INTO restaurants (id, restaurantname) VALUES ('${restaurantID}', '${restaurantName}'); `, (err, res) => {
+
 			if (err) {
 				reject(err);
 			} else {
@@ -31,15 +34,16 @@ const addRestaurant = (restaurantName) => {
 
 const getReservations = (restaurantID, dateToReserve) => {
 	return new Promise((resolve, reject) => {
-		client.query(`SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve=${dateToReserve};`, (err, res) => {
+		client.query(`SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve='${dateToReserve}';`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
-				resolve(res);
+				resolve(res.rows);
 			}
 		})
 	})
-}
+};
+
 
 const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) => {
 	return new Promise((resolve, reject) => {
@@ -47,27 +51,27 @@ const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) =
 			if (err) {
 				reject(err);
 			} else {
-				resolve(res);
+				resolve(res.rows);
 			}
 		})
 	})
-}
+};
 
 const deleteReservation = (reservationID) => {
-	return new Prmise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		client.query(`DELETE FROM reservations WHERE reservation.id = ${reservationID};`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
-				resolve(res);
+				resolve(res.rows);
 			}
 		})
 	})
-}
+};
 
 const updateReservation = (reservationID, dateToReserve, timeToReserve, partySize) => {
 	return new Promise((resolve, reject) => {
-		client.query(`UPDATE reservations SET datetoreserve=${dateToReserve}, timetoreserve=${timeToReserve}, partysize=${partySize} WHERE id=${reservationID};`, (err, res) => {
+		client.query(`UPDATE reservations SET datetoreserve='${dateToReserve}', timetoreserve='${timeToReserve}', partysize='${partySize}' WHERE id=${reservationID};`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -75,7 +79,7 @@ const updateReservation = (reservationID, dateToReserve, timeToReserve, partySiz
 			}
 		})
 	})
-}
+};
 
 
 module.exports = {

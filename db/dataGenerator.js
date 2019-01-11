@@ -1,39 +1,49 @@
 const fs = require('fs');
 const faker = require('faker');
 const path = require('path');
+const format = require('date-fns/format');
 
-const wstream = fs.createWriteStream(__dirname + '/data.csv', {flags: 'w'});
+const wRestStream = fs.createWriteStream(__dirname + '/restaurants.csv', {flags: 'w'});
+const wResStream = fs.createWriteStream(__dirname + '/reservations.csv', {flags: 'w'});
+
+const generateName = () => `${faker.commerce.productAdjective()} ${faker.commerce.department()} ${faker.commerce.product()}`;
+
+const generateRestaurantId = () => Math.floor(Math.random() * 100 + 1);
+
+const generateDate = () => format(Date.parse(faker.date.future()), 'MMDDYY');
+
+const generateTime = () => (Math.floor(Math.random() * (23 - 10) + 10) * 100)
+  + (Math.floor(Math.random() * 2) * 30);
+
+const generatePartySize = () => Math.floor(Math.random() * 19 + 1);
+
 let i = 0;
-let current = 0;
 
 const WriteOne = () => {
 	while (i < 10000000){
-		let res = [];
-		for (let j = 0; j < Math.floor(Math.random()*5); j++) {
-			current ++;
-			let date = faker.date.past();
-			res.push({
-				id: current,
-				dateToReserve: date.getDay().toString() + date.getMonth().toString() + date.getFullYear().toString(),
-				timeToReserve: date.getHours().toString() + date.getMinutes().toString(), 
-				partySize: Math.floor(Math.random()*5).toString(),
-			})
-			let entry = {
-				id: i,
-				name: faker.company.companyName(),
-				reservations: res,
-			};
-			if(!wstream.write(JSON.stringify(entry) + '\n')) {
+		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
+			if (!WriteRes(i)) {
 				return;
 			}
-			i++;
 		}
+		if (!wRestStream.write(`${i},${generateName()}\n`)) {
+			i++;
+			return;
+		}
+		i++;
 	}
-	wstream.end();
+	wResStream.end();
+	wRestStream.end();
 };
 
-wstream.on('drain', () => {
+const WriteRes = (i) => {
+	return wResStream.write(`${i},${generateDate()},${generateTime()},${generatePartySize()}\n`)
+}
+
+wRestStream.on('drain', () => {
 	WriteOne();
 });
 
-WriteOne();
+wResStream.on('drain', () => {
+	WriteOne();
+})
