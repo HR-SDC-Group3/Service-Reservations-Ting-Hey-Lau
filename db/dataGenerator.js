@@ -3,8 +3,8 @@ const faker = require('faker');
 const path = require('path');
 const format = require('date-fns/format');
 
-const wRestStream = fs.createWriteStream(__dirname + '/restaurants.csv', {flags: 'w'});
-const wResStream = fs.createWriteStream(__dirname + '/reservations.csv', {flags: 'w'});
+const wRestStream = fs.createWriteStream(__dirname + '/restaurants2.csv', {flags: 'w'});
+const wResStream = fs.createWriteStream(__dirname + '/reservations2.csv', {flags: 'w'});
 
 const generateName = () => `${faker.commerce.productAdjective()} ${faker.commerce.department()} ${faker.commerce.product()}`;
 
@@ -20,7 +20,7 @@ const generatePartySize = () => Math.floor(Math.random() * 19 + 1);
 let i = 0;
 
 const WriteOne = () => {
-	while (i < 10000000){
+	while (i < 1000){
 		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
 			if (!WriteRes(i)) {
 				return;
