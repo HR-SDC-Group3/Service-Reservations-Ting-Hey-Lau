@@ -2,60 +2,75 @@ const auth = require('./couchConfig.js');
 const nano = require('nano')(`http://${auth.user}:${auth.pass}@localhost:5984`);
 const Promise = require('bluebird');
 
-nano.use('opentablereservations');
+const restaurants = nano.use('restaurants');
+const reservations = nano.use('reservations')
 
 const addRestaurant = (restaurantID, restaurantName) => {
-	return new Promise((resolve, reject) => {
-		couch.insert('opentablereservations', {
-			_id:restaurantID,
-
-		})
-	})
+	return restaurants.insert('opentablereservations', {
+		id:restaurantID,
+		restaurantname: restaurantName,
+	});
 };
 
 const getReservations = (restaurantID, dateToReserve) => {
-		couch.get("opentablereservations", `SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve='${dateToReserve}';`, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res.rows);
-			}
-		})
+	return reservations.find({selector: {
+		restaurantid: {"$eq": restaurantID},
+		datetoreserve: {"$eq": dateToReserve}
+    },
+  limit:50
+  });
 };
 
 const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) => {
-	return new Promise((resolve, reject) => {
-		couch.query(`INSERT INTO reservations (restaurantid, datetoreserve, timetoreserve, partysize) VALUES ('${restaurantID}', '${dateToReserve}', '${timeToReserve}', '${partySize}'); `, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res.rows);
-			}
-		})
-	})
+  return reservations.insert({ 
+  	restaurantid: restaurantID,
+  	datetoreserve: dateToReserve,
+  	timetoreserve: timeToReserve,
+  	partysize: partySize
+  });
 };
 
 const deleteReservation = (reservationID) => {
 	return new Promise((resolve, reject) => {
-		couch.query(`DELETE FROM reservations WHERE reservation.id = ${reservationID};`, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res.rows);
-			}
+		reservations.find({selector: {
+			reservationid:{ "$eq": reservationID}
+		}}).then(body => {
+			reservations.destroy(body._id, body._rev, (err, res) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(res);
+				}
+			});
 		})
-	})
+	});
 };
 
 const updateReservation = (reservationID, dateToReserve, timeToReserve, partySize) => {
 	return new Promise((resolve, reject) => {
-		couch.query(`UPDATE reservations SET datetoreserve='${dateToReserve}', timetoreserve='${timeToReserve}', partysize='${partySize}' WHERE id=${reservationID};`, (err, res) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(res);
-			}
-		})
+		reservations.find({selector: {
+			_id: {"$eq": reservationID.toString()}
+		}}).then(body => {
+			reservations.insert({
+				datetoreserve: dateToReserve,
+				timetoreserve: timeToReserve,
+				partysize: partySize
+			}, reservationID.toString(), (err, res) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(res);
+				}
+			})
+		});
 	})
 };
 
+
+module.exports = {
+	updateReservation,
+	deleteReservation,
+	addReservation,
+	addRestaurant,
+	getReservations
+}

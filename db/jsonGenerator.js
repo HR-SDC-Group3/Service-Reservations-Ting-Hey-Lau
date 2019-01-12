@@ -1,0 +1,42 @@
+const faker = require('faker');
+const path = require('path');
+const format = require('date-fns/format');
+const jsonfile = require('jsonfile');
+
+const generateName = () => `${faker.commerce.productAdjective()} ${faker.commerce.department()} ${faker.commerce.product()}`;
+
+const generateDate = () => format(Date.parse(faker.date.future()), 'MMDDYY');
+
+const generateTime = () => (Math.floor(Math.random() * (23 - 10) + 10) * 100)
+  + (Math.floor(Math.random() * 2) * 30);
+
+const generatePartySize = () => Math.floor(Math.random() * 19 + 1);
+
+const file = path.join(__dirname, 'data2.jsonl');
+
+let i = 0;
+
+const WriteOne = () => {
+	while (i < 100){
+		let res = [];
+		let entry = {};
+		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
+			res.push({
+				restaurantid: i,
+				datetoreserve: generateDate(),
+				timetoreserve: generateTime(),
+				partysize: generatePartySize()
+			})
+		}
+		entry = {
+			id: i,
+			restaurantname: generateName(),
+			reservations: res,
+		};
+		  jsonfile.writeFileSync(file, entry, {flag: 'a'});
+		i++;
+	}
+};
+
+
+WriteOne();
