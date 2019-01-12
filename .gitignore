@@ -10,5 +10,7 @@ db/couchConfig.js
 db/data2.jsonl
 db/data.jsonl
 
+
+
 # Only apps should have lockfiles
 yarn.lock
