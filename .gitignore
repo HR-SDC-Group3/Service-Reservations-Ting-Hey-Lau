@@ -8,7 +8,8 @@ db/reservations.csv
 db/restaurants.csv
 db/couchConfig.js
 db/data2.jsonl
-db/data.jsonl
+db/data3.jsonl
+newrelic.js
 
 # Only apps should have lockfiles
 yarn.lock

@@ -14,12 +14,8 @@ let i = 0;
 let sampleSize = 10000000;
 let mode = 'JSON';
 if (mode !== 'JSON'){
-	const wRestStream = fs.createWriteStream(__dirname + '/restaurants2.csv', {flags: 'w'});
-	const wResStream = fs.createWriteStream(__dirname + '/reservations2.csv', {flags: 'w'});
-
-	wRestStream.write(`id,restaurantname\n`);
-	wResStream.write(`restaurantid,datetoreserve,timetoreserve,partysize\n`);
-
+	const wRestStream = fs.createWriteStream(__dirname + '/restaurants.csv', {flags: 'w'});
+	const wResStream = fs.createWriteStream(__dirname + '/reservations.csv', {flags: 'w'});
 
 	const WriteOne = () => {
 		while (i < sampleSize){
@@ -59,7 +55,6 @@ if (mode !== 'JSON'){
 			let entry = {};
 			for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
 				res.push({
-					restaurantid: i,
 					datetoreserve: generateDate(),
 					timetoreserve: generateTime(),
 					partysize: generatePartySize()
