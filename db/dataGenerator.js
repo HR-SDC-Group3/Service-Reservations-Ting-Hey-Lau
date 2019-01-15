@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const faker = require('faker');
 const path = require('path');
@@ -73,3 +74,4 @@ if (mode !== 'JSON'){
 
 	WriteOne();
 }
+

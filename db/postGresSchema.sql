@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS opentablereservations;
 
 CREATE DATABASE opentablereservations;
@@ -30,3 +31,4 @@ CREATE INDEX foreign_id ON reservations (restaurantID);
 /* run psql -U YOUR_USER_NAME -W < db/postGresSchema.sql
 from the root directory and enter your password for the prompts 
 change lines 20, 22 to absolute paths for respective restaurant and reservation csv raw data files*/
+
