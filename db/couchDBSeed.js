@@ -11,7 +11,6 @@ const opts = {url:`http://${auth.user}:${auth.pass}@localhost:5984`, database:'o
 let check = false;
 
 async function seeder() {
-
 	await nano.db.list().then(body => {
 		body.forEach((name) => {
 			if (name === 'opentablereservations') {
@@ -21,6 +20,7 @@ async function seeder() {
 						const database = nano.db.use('opentablereservations');
 						rStream.pipe(parser);
 						parser.on('data', data => {
+							rStream.pause();
 							database.insert({
 								restaurantname: data.restaurantname,
 								reservations: data.reservations
@@ -28,6 +28,7 @@ async function seeder() {
 								if (err) {
 									console.log(err);
 								} else {
+									rStream.resume();
 									console.log(res);
 								}
 							})

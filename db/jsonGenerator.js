@@ -12,25 +12,24 @@ const generateTime = () => (Math.floor(Math.random() * (23 - 10) + 10) * 100)
 
 const generatePartySize = () => Math.floor(Math.random() * 19 + 1);
 
-const file = path.join(__dirname, 'data2.jsonl');
+const file = path.join(__dirname, 'data3.jsonl');
 
 let i = 0;
 
 const WriteOne = () => {
-	while (i < 100){
+	while (i < 10000000){
 		let res = [];
 		let entry = {};
 		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {
 			res.push({
-				restaurantid: i,
-				datetoreserve: generateDate(),
-				timetoreserve: generateTime(),
-				partysize: generatePartySize()
+				datetoreserve: generateDate().toString(),
+				timetoreserve: generateTime().toString(),
+				partysize: generatePartySize().toString()
 			})
 		}
 		entry = {
 			id: i,
-			restaurantname: generateName(),
+			restaurantname: generateName().toString(),
 			reservations: res,
 		};
 		  jsonfile.writeFileSync(file, entry, {flag: 'a'});
