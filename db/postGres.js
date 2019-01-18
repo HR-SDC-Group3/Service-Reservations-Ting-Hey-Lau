@@ -1,8 +1,6 @@
 const { Pool } = require('pg');
 const redis = require('redis');
 const Rclient = redis.createClient();
-const bluebird = require('bluebird');
-bluebird.promisifyAll(redis);
 
 Rclient.on('error', (err) => {
 	console.log('Error ' + err);
