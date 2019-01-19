@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const common = {
   context: path.join(__dirname),
   module: {
-    noParse: [/aws\-sdk/, /newrelic/, /redis/, /pg/],
     rules: [
       {
         test: /\.jsx?$/,
@@ -42,8 +41,8 @@ const server = {
     filename: 'server-bundle.js',
     libraryTarget: 'commonjs-module'
   }
+};
 
-}
 
 module.exports = [
   Object.assign({}, common, client),

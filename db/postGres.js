@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const redis = require('redis');
 const Rclient = redis.createClient();
+const AWS = require('aws-sdk');
 
 Rclient.on('error', (err) => {
 	console.log('Error ' + err);
@@ -25,10 +26,11 @@ const getReservations = (restaurantID, dateToReserve) => {
 
 const client = new Pool({
 	user: 'postgres',
-	host: 'localhost',
+	host: 'ec2-13-57-212-164.us-west-1.compute.amazonaws.com',
 	database: 'opentablereservations',
 	password: 'admin',
 	port: 5432,
+	ssl: true,
 })
 
 client.connect((err) => {
