@@ -1,57 +1,51 @@
 const path = require('path');
+const webpack = require('webpack');
 
-const SRC_DIR = path.join(__dirname, '/client/src');
-const DIST_DIR = path.join(__dirname, '/client/dist');
-const SER_DIR = path.join(__dirname, '/server');
-
-module.exports = [{
-  entry: `${SRC_DIR}/index.jsx`,
-  output: {
-    filename: 'bundle.js',
-    path: DIST_DIR,
-  },
+const common = {
+  context: path.join(__dirname),
   module: {
-    noParse: /newrelic/,
+    noParse: [/aws\-sdk/, /newrelic/, /redis/, /pg/],
     rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['@babel/react', '@babel/env', 'airbnb']
+        },
+      },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      {
-        test: /\.jsx?/,
-        exclude: /node_modules/,
-        include: SRC_DIR,
-        loader: 'babel-loader',
-        query: {
-          presets: ['@babel/preset-env', '@babel/preset-react', 'airbnb'],
-        },
+      { 
+        test: /aws-sdk/, 
+        loaders: ["transform?brfs"],
       },
     ],
-  },
-},
-{
-  entry: `${SER_DIR}/index.js`,
+  }
+};
+
+const client = {
+  entry: path.join(__dirname, '/client', 'src', 'index.jsx'),
+  output: {
+    path: path.join(__dirname, '/client/dist'),
+    filename: 'bundle.js'
+  }
+};
+
+const server = {
+  entry: path.join(__dirname, '/server','index.js'),
   target: 'node',
   output: {
-    path: __dirname + '/public',
-    filename: 'app-server.js',
+    path: path.join(__dirname, '/client/dist'),
+    filename: 'server-bundle.js',
     libraryTarget: 'commonjs-module'
-  },module: {
-    noParse: /newrelic/,
-    rules: [
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.jsx?/,
-        include: SRC_DIR,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['@babel/preset-env', '@babel/preset-react', 'airbnb'],
-        },
-      },
-    ],
-  }  
-}]
+  }
+
+}
+
+module.exports = [
+  Object.assign({}, common, client),
+  Object.assign({}, common, server)
+];

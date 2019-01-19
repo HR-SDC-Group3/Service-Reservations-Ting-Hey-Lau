@@ -1,10 +1,8 @@
 module.exports = (items) => `
   <script src="/lib/react.development.js"></script>
   <script src="/lib/react-dom.development.js"></script>
-
-  ${items.map(item => {
-    return `<script type="text/javascript" src="bundle.js"></script>`;
-  }).join('\n')}
+  <script type="text/javascript" src="bundle.js"></script>
+  <script type="text/javascript" src="server-bundle.js"></script>
 
   <script>
     ${items.map(item => `

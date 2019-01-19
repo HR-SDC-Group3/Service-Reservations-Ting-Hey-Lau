@@ -9,6 +9,9 @@ const cors = require('cors');
 const Layout = require('./templates/layout');
 const App = require('./templates/app');
 const Scripts = require('./templates/scripts');
+//import AppPage = require('../client/dist/bundle.js');
+
+console.log(App);
 
 const app = express();
 
@@ -18,8 +21,8 @@ app.use(express.static(`${__dirname}/../public/`));
 app.use(bodyParser());
 app.use(cors());
 
-app.get('/restaurants/:id/', (req, res) => {
-  res.end((Layout('Reserve.me Calendar', App(['reservationApp']), Scripts(['reservationApp']))));
+app.get('/restaurants/:id/4Head', (req, res) => {
+  res.end(Layout('Reserve.me Calendar', App(['reservationApp']), Scripts(['reservationApp'])));
 })
 
 app.post('/api/restaurants/', (req, res) => {
