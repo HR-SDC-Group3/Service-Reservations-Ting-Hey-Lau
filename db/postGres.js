@@ -1,12 +1,36 @@
+const { Pool } = require('pg');
+const redis = require('redis');
+const Rclient = redis.createClient();
+const AWS = require('aws-sdk');
 
-const { Pool,Client } = require('pg');
+Rclient.on('error', (err) => {
+	console.log('Error ' + err);
+});
+
+const getReservations = (restaurantID, dateToReserve) => {
+	return new Promise((resolve, reject) => {
+		Rclient.get(`${restaurantID.toString() + dateToReserve}`, (err, res) => {
+			if (err) {
+				console.log(err);
+				reject(err);
+			} else if (!res) {
+				resolve(getReservations2(restaurantID, dateToReserve));
+			} else	{
+				res = JSON.parse(res);
+				getReservations2(restaurantID, dateToReserve);
+				resolve(res);
+			}
+		})
+	})
+};
 
 const client = new Pool({
 	user: 'postgres',
-	host: 'localhost',
+	host: 'ec2-13-57-212-164.us-west-1.compute.amazonaws.com',
 	database: 'opentablereservations',
 	password: 'admin',
 	port: 5432,
+	ssl: true,
 })
 
 client.connect((err) => {
@@ -29,12 +53,14 @@ const addRestaurant = (restaurantID, restaurantName) => {
 	})
 };
 
-const getReservations = (restaurantID, dateToReserve) => {
+const getReservations2 = (restaurantID, dateToReserve) => {
 	return new Promise((resolve, reject) => {
 		client.query(`SELECT * FROM reservations WHERE restaurantid=${restaurantID} AND datetoreserve='${dateToReserve}';`, (err, res) => {
 			if (err) {
 				reject(err);
 			} else {
+				let rows = JSON.stringify(res.rows);
+				Rclient.set(`${restaurantID.toString() + dateToReserve}`, rows);
 				resolve(res.rows);
 			}
 		})

@@ -17,7 +17,7 @@ const file = path.join(__dirname, 'data3.jsonl');
 let i = 0;
 
 const WriteOne = () => {
-	while (i < 10000000){
+	while (i < 2000000000){
 		let res = [];
 		let entry = {};
 		for (let j = 0; j < Math.ceil(Math.random()*5); j++) {

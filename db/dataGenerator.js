@@ -7,16 +7,16 @@ const jsonfile = require('jsonfile');
 
 const generateName = () => `${faker.commerce.productAdjective()} ${faker.commerce.department()} ${faker.commerce.product()}`;
 const generateDate = () => format(Date.parse(faker.date.future()), 'MMDDYY');
-const generateTime = () => (Math.floor(Math.random() * (23 - 10) + 10) * 100)
+const generateTime = () => (Math.floor(Math.random() * (23 - 10) + 10) * 100);
   + (Math.floor(Math.random() * 2) * 30);
 const generatePartySize = () => Math.floor(Math.random() * 19 + 1);
 
 let i = 0;
-let sampleSize = 10000000;
-let mode = 'JSON';
+let sampleSize = 200000000;
+let mode = 'Nope';
 if (mode !== 'JSON'){
-	const wRestStream = fs.createWriteStream(__dirname + '/restaurants.csv', {flags: 'w'});
-	const wResStream = fs.createWriteStream(__dirname + '/reservations.csv', {flags: 'w'});
+	const wRestStream = fs.createWriteStream('E:/restaurants.csv', {flags: 'w'});
+	const wResStream = fs.createWriteStream('E:/reservations.csv', {flags: 'w'});
 
 	const WriteOne = () => {
 		while (i < sampleSize){
