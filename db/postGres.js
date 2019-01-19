@@ -25,10 +25,10 @@ const getReservations = (restaurantID, dateToReserve) => {
 };
 
 const client = new Pool({
-	user: 'postgres',
+	user: 'power_user',
 	host: 'ec2-13-57-212-164.us-west-1.compute.amazonaws.com',
 	database: 'opentablereservations',
-	password: 'admin',
+	password: '$poweruserpassword',
 	port: 5432,
 	ssl: true,
 })
