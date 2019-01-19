@@ -52,7 +52,6 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "aws-sdk": "^2.391.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.0-beta.6",
     "babel-plugin-styled-components": "^1.10.0",
