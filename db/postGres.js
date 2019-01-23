@@ -6,6 +6,10 @@ Rclient.on('error', (err) => {
 	console.log('Error ' + err);
 });
 
+Rclient.on('connect', () => {
+	console.log('connected to redis');
+})
+
 const getReservations = (restaurantID, dateToReserve) => {
 	return new Promise((resolve, reject) => {
 		Rclient.get(`${restaurantID.toString() + dateToReserve}`, (err, res) => {
