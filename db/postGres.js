@@ -31,7 +31,7 @@ const getReservations = (restaurantID, dateToReserve) => {
 
 const client = new Pool({
 	user: 'power_user',
-	host: '13.57.212.164',
+	host: '54.219.139.114',
 	database: 'opentablereservations',
 	password: '$poweruserpassword'
 })
