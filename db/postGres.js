@@ -26,11 +26,10 @@ const getReservations = (restaurantID, dateToReserve) => {
 };
 
 const client = new Pool({
-	user: 'postgres',
-	host: 'localhost',
+	user: 'power_user',
+	host: '13.57.212.164',
 	database: 'opentablereservations',
-	password: 'admin',
-	port: 5432,
+	password: '$poweruserpassword'
 })
 
 client.connect((err) => {
