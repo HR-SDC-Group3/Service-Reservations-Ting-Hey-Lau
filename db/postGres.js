@@ -1,7 +1,6 @@
 const { Pool } = require('pg');
 const redis = require('redis');
 const Rclient = redis.createClient();
-const AWS = require('aws-sdk');
 
 Rclient.on('error', (err) => {
 	console.log('Error ' + err);
@@ -14,9 +13,11 @@ const getReservations = (restaurantID, dateToReserve) => {
 				console.log(err);
 				reject(err);
 			} else if (!res) {
+				console.log('here');
 				resolve(getReservations2(restaurantID, dateToReserve));
 			} else	{
 				res = JSON.parse(res);
+				console.log('there');
 				getReservations2(restaurantID, dateToReserve);
 				resolve(res);
 			}
@@ -26,11 +27,9 @@ const getReservations = (restaurantID, dateToReserve) => {
 
 const client = new Pool({
 	user: 'power_user',
-	host: 'ec2-13-57-212-164.us-west-1.compute.amazonaws.com',
+	host: '13.57.212.164',
 	database: 'opentablereservations',
-	password: '$poweruserpassword',
-	port: 5432,
-	ssl: true,
+	password: '$poweruserpassword'
 })
 
 client.connect((err) => {
@@ -60,7 +59,7 @@ const getReservations2 = (restaurantID, dateToReserve) => {
 				reject(err);
 			} else {
 				let rows = JSON.stringify(res.rows);
-				Rclient.set(`${restaurantID.toString() + dateToReserve}`, rows);
+				Rclient.set(`${restaurantID.toString() + dateToReserve}`, rows, 'EX', 10);
 				resolve(res.rows);
 			}
 		})
@@ -73,6 +72,7 @@ const addReservation = (restaurantID, dateToReserve, timeToReserve, partySize) =
 			if (err) {
 				reject(err);
 			} else {
+				getReservations2(restaurantID, dateToReserve);
 				resolve(res.rows);
 			}
 		})
@@ -85,6 +85,9 @@ const deleteReservation = (reservationID) => {
 			if (err) {
 				reject(err);
 			} else {
+				client.query(`SELECT restaurantid FROM reservations where id=${reservationID}`, (err, res) => {
+					getReservations2(res.rows[0], dateToReserve);
+				})
 				resolve(res.rows);
 			}
 		})
@@ -97,7 +100,10 @@ const updateReservation = (reservationID, dateToReserve, timeToReserve, partySiz
 			if (err) {
 				reject(err);
 			} else {
-				resolve(res);
+				client.query(`SELECT restaurantid FROM reservations where id=${reservationID}`, (err, res) => {
+					getReservations2(res.rows[0], dateToReserve);
+				})
+				resolve(res.rows);
 			}
 		})
 	})
